@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import projectRoutes from './routes/ProjectRoutes';
 
 dotenv.config();
 
@@ -13,7 +14,7 @@ app.use(cors({
   credentials: true
 }));
 
-app.use(express.json());
+app.use('/api/projects', projectRoutes);
 
 app.get('/api/health', (req: Request, res: Response) => {
   res.status(200).json({ status: 'ok', message: 'Secure portfolio backend is fully operational' });
