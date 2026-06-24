@@ -1,4 +1,5 @@
 import { Router, Request, Response } from 'express';
+import { requireAuth } from '../middleware/authMiddleware';
 
 interface Project {
   id: string;
@@ -29,10 +30,8 @@ router.get('/', (req: Request, res: Response) => {
 });
 
 // 2. TEMPORARY ENDPOINT: Add a new project
-router.post('/', (req: Request, res: Response) => {
+router.post('/', requireAuth, (req: Request, res: Response) => {
   const { title, description, technologies, imageUrl, liveUrl, githubUrl } = req.body;
-
-  // Basic Input Validation
   if (!title || !description || !technologies) {
      res.status(400).json({ error: 'Title, description, and technologies are required.' });
      return;
