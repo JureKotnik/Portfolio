@@ -12,7 +12,12 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
     return;
   }
 
-  const savedHash = process.env.ADMIN_PASSWORD_HASH || '';
+  const savedHash = (process.env.ADMIN_PASSWORD_HASH || '').trim().replace(/['"]/g, '');
+
+  if (!savedHash) {
+    res.status(500).json({ error: 'Authentication is misconfigured on the server' });
+    return;
+  }
 
   const isMatch = await bcrypt.compare(password, savedHash);
 

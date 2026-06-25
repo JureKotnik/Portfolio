@@ -1,0 +1,75 @@
+### 1. API Health Check
+GET http://localhost:5000/api/health
+
+###
+
+### 2. Login as Admin to get Security Token (JWT)
+# @name login
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+    "password": "Password123!"
+}
+
+###
+
+### Save Token from the Login Request response to a variable
+@authToken = {{login.response.body.token}}
+
+###
+
+### 3. Fetch All Projects (Public)
+GET http://localhost:5000/api/projects
+
+###
+
+### 4. Fetch Single Project by ID (Public)
+GET http://localhost:5000/api/projects/1
+
+###
+
+### 5. Attempt to Create Project WITHOUT Token (Should Fail with 401)
+POST http://localhost:5000/api/projects
+Content-Type: application/json
+
+{
+    "title": "Hack Attack Project",
+    "description": "Should not allow unauthorized creation.",
+    "technologies": ["Malware", "Exploits"]
+}
+
+###
+
+### 6. Create Project WITH Token (Should Succeed with 201)
+POST http://localhost:5000/api/projects
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+    "title": "Social Network App",
+    "description": "A fully functional chat and networking application.",
+    "technologies": ["React", "Express", "Socket.io"],
+    "imageUrl": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=80",
+    "githubUrl": "https://github.com"
+}
+
+###
+
+### 7. Update Project (Should Succeed with 200)
+# Updates the template project (ID: 1)
+PUT http://localhost:5000/api/projects/1
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+    "title": "Updated Portfolio Site",
+    "description": "An incredibly secure, updated, and state-of-the-art developer portfolio."
+}
+
+###
+
+### 8. Delete Project (Should Succeed with 200)
+# Deletes the template project (ID: 1)
+DELETE http://localhost:5000/api/projects/1
+Authorization: Bearer {{authToken}}
